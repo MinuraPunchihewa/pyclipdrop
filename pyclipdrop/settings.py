@@ -18,3 +18,6 @@ class PyClipdropSettings(BaseSettings):
 
     BASE_URL: Text = "https://clipdrop-api.co"
     VERSION: Text = "v1"
+
+
+settings = PyClipdropSettings()

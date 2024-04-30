@@ -2,11 +2,11 @@ import requests
 from typing import Text
 from pathlib import Path
 
-from pyclipdrop.settings import PyClipdropSettings
+from pyclipdrop.settings import settings
 
 
 class PyClipdropClient:
-    def __init__(self, api_key: Text, base_url: Text = PyClipdropSettings.BASE_URL, version: Text = PyClipdropSettings.VERSION):
+    def __init__(self, api_key: Text, base_url: Text = settings.BASE_URL, version: Text = settings.VERSION):
         self.api_key = api_key
         self.base_url = base_url
         self.version = version
