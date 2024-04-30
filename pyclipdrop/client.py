@@ -2,10 +2,14 @@ import requests
 from typing import Text
 from pathlib import Path
 
+from pyclipdrop.settings import PyClipdropSettings
+
 
 class PyClipdropClient:
-    def __init__(self, api_key: Text):
+    def __init__(self, api_key: Text, base_url: Text = PyClipdropSettings.BASE_URL, version: Text = PyClipdropSettings.VERSION):
         self.api_key = api_key
+        self.base_url = base_url
+        self.version = version
 
     def text_to_image(self, prompt: Text, output_file: Text = 'output.png'):
         output_path = Path(output_file)
@@ -19,7 +23,7 @@ class PyClipdropClient:
             raise ValueError("The path to the output file does not exist.")
 
         response = requests.post(
-            'https://clipdrop-api.co/text-to-image/v1',
+            f'{self.base_url}/text-to-image/{self.version}',
             files={
                 'prompt': (None, prompt, 'text/plain')
             },
