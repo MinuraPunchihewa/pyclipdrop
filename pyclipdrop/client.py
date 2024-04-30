@@ -1,3 +1,4 @@
+import os
 import requests
 from typing import Text
 from pathlib import Path
@@ -6,8 +7,11 @@ from pyclipdrop.settings import settings
 
 
 class PyClipdropClient:
-    def __init__(self, api_key: Text, base_url: Text = settings.BASE_URL, version: Text = settings.VERSION):
-        self.api_key = api_key
+    def __init__(self, api_key: Text = None, base_url: Text = settings.BASE_URL, version: Text = settings.VERSION):
+        self.api_key = api_key or os.environ.get('CLIPDROP_API_KEY')
+        if not self.api_key:
+            raise ValueError("A Clipdrop API key must either be passed to the client or set as an environment variable.")
+
         self.base_url = base_url
         self.version = version
 
