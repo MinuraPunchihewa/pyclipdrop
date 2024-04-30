@@ -1,3 +1,4 @@
+from typing import Text
 from pydantic_settings import BaseSettings
 
 
@@ -8,12 +9,12 @@ class PyClipdropSettings(BaseSettings):
     Attributes
     ----------
 
-    BASE_URL : str
+    BASE_URL : Text
         Base URL for the Clipdrop API.
 
-    VERSION : str
+    VERSION : Text
         Version of the Clipdrop API.
     """
 
-    BASE_URL = "https://clipdrop-api.co"
-    VERSION = "v1"
+    BASE_URL: Text = "https://clipdrop-api.co"
+    VERSION: Text = "v1"
