@@ -41,6 +41,37 @@ class PyClipdropClient:
                 f.write(response.content)
         else:
             response.raise_for_status()
+
+    def remove_background(self, image_path: Text, prompt: Text, output_file: Text = 'output.png'):
+        output_path = Path(output_file)
+
+        # Check if the output file has a .png or .webp extension
+        suffix = output_path.suffix
+        if suffix not in ['.png', '.jpg', '.webp']:
+            raise ValueError("Output file must be a .png, .jpg or .webp file.")
+        
+        # Check if the path to the file exists
+        if not output_path.parent.exists():
+            raise ValueError("The path to the output file does not exist.")
+
+        response = requests.post(
+            f'{self.base_url}/remove-background/{self.version}',
+            files={
+                'image_file': (image_path, open(image_path, 'rb'), f'image/{suffix[1:]}')
+            },
+            data={
+                'prompt': prompt
+            },
+            headers={
+                'x-api-key': self.api_key
+            }
+        )
+
+        if (response.ok):
+            with open(output_file, 'wb') as f:
+                f.write(response.content)
+        else:
+            response.raise_for_status()
         
 
     
