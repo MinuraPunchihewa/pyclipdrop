@@ -54,18 +54,19 @@ class PyClipdropClient:
         if not output_path.parent.exists():
             raise ValueError("The path to the output file does not exist.")
 
-        response = requests.post(
-            f'{self.base_url}/remove-background/{self.version}',
-            files={
-                'image_file': (image_path, open(image_path, 'rb'), f'image/{suffix[1:]}')
-            },
-            data={
-                'prompt': prompt
-            },
-            headers={
-                'x-api-key': self.api_key
-            }
-        )
+        with open(image_path, 'rb') as image_file:
+            response = requests.post(
+                f'{self.base_url}/remove-background/{self.version}',
+                files={
+                    'image_file': (image_path, image_file, f'image/{suffix[1:]}')
+                },
+                data={
+                    'prompt': prompt
+                },
+                headers={
+                    'x-api-key': self.api_key
+                }
+            )
 
         if (response.ok):
             with open(output_file, 'wb') as f:
