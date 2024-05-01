@@ -42,7 +42,7 @@ class PyClipdropClient:
         else:
             response.raise_for_status()
 
-    def remove_background(self, image_path: Text, prompt: Text, output_file: Text = 'output.png'):
+    def replace_background(self, image_path: Text, prompt: Text, output_file: Text = 'output.png'):
         output_path = Path(output_file)
 
         # Check if the output file has a .png or .webp extension
@@ -56,7 +56,7 @@ class PyClipdropClient:
 
         with open(image_path, 'rb') as image_file:
             response = requests.post(
-                f'{self.base_url}/remove-background/{self.version}',
+                f'{self.base_url}/replace-background/{self.version}',
                 files={
                     'image_file': (image_path, image_file, f'image/{suffix[1:]}')
                 },
