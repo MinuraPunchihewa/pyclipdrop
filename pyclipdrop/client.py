@@ -42,23 +42,38 @@ class PyClipdropClient:
         else:
             response.raise_for_status()
 
-    def replace_background(self, image_path: Text, prompt: Text, output_file: Text = 'output.png'):
-        output_path = Path(output_file)
+    def replace_background(self, input_file: Text, prompt: Text, output_file: Text = None):
+        input_path = Path(input_file)
+        input_suffix = input_path.suffix
 
-        # Check if the output file has a .png or .webp extension
-        suffix = output_path.suffix
-        if suffix not in ['.png', '.jpg', '.webp']:
+        # If the output file is not specified, use 'output' with the same extension as the input file
+        if not output_file:
+            output_file = f'output{input_suffix}'
+
+        output_path = Path(output_file)
+        output_suffix = output_path.suffix
+
+        # Check if the input file exists
+        if not input_path.exists():
+            raise ValueError("The input file does not exist.")
+
+        # Check if the input file has a .png or .webp extension
+        if input_suffix not in ['.png', '.jpg', '.webp']:
             raise ValueError("Output file must be a .png, .jpg or .webp file.")
         
-        # Check if the path to the file exists
+        # Check if the output file has the same extension as the input file
+        if output_suffix != input_suffix:
+            raise ValueError("Output file must have the same extension as the input file.")
+        
+        # Check if the path to the output file exists
         if not output_path.parent.exists():
             raise ValueError("The path to the output file does not exist.")
 
-        with open(image_path, 'rb') as image_file:
+        with open(input_file, 'rb') as image_file:
             response = requests.post(
                 f'{self.base_url}/replace-background/{self.version}',
                 files={
-                    'image_file': (image_path, image_file, f'image/{suffix[1:]}')
+                    'image_file': (input_file, image_file, f'image/{input_suffix[1:]}')
                 },
                 data={
                     'prompt': prompt
