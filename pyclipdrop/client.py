@@ -57,7 +57,7 @@ class PyClipdropClient:
         if not input_path.exists():
             raise ValueError("The input file does not exist.")
 
-        # Check if the input file has a .png or .webp extension
+        # Check if the input file has a .png, .jpg or .webp extension
         if input_suffix not in ['.png', '.jpg', '.webp']:
             raise ValueError("Output file must be a .png, .jpg or .webp file.")
         
@@ -89,5 +89,42 @@ class PyClipdropClient:
         else:
             response.raise_for_status()
         
+    def remove_background(self, input_file: Text, output_file: Text = 'output.png'):
+        input_path = Path(input_file)
+        input_suffix = input_path.suffix
 
-    
+        output_path = Path(output_file)
+        output_suffix = output_path.suffix
+
+        # Check if the input file exists
+        if not input_path.exists():
+            raise ValueError("The input file does not exist.")
+
+        # Check if the input file has a .png, .jpg or .webp extension
+        if input_suffix not in ['.png', '.jpg', '.webp']:
+            raise ValueError("Output file must be a .png, .jpg or .webp file.")
+        
+        # Check if the output file has a .png, .jpg or .webp extension
+        if output_suffix not in ['.png', '.jpg', '.webp']:
+            raise ValueError("Output file must be a .png, .jpg or .webp file.")
+        
+        # Check if the path to the output file exists
+        if not output_path.parent.exists():
+            raise ValueError("The path to the output file does not exist.")
+
+        with open(input_file, 'rb') as image_file:
+            response = requests.post(
+                f'{self.base_url}/remove-background/{self.version}',
+                files={
+                    'image_file': (input_file, image_file, f'image/{input_suffix[1:]}')
+                },
+                headers={
+                    'x-api-key': self.api_key
+                }
+            )
+
+        if (response.ok):
+            with open(output_file, 'wb') as f:
+                f.write(response.content)
+        else:
+            response.raise_for_status()
