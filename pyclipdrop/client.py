@@ -6,6 +6,9 @@ from pathlib import Path
 from pyclipdrop.settings import settings
 
 
+# TODO: Add docstrings
+# TODO: Remove duplicate code
+# TODO: Suppport URL input
 class PyClipdropClient:
     def __init__(self, api_key: Text = None, base_url: Text = settings.BASE_URL, version: Text = settings.VERSION):
         self.api_key = api_key or os.environ.get('CLIPDROP_API_KEY')
