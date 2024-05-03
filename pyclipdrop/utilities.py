@@ -28,10 +28,9 @@ class InputUtilities:
     
 
 class OutputUtilities:
-    def __init__(self, output_file: Text, supported_extensions: List[Text] = None, input_suffix: Text = None) -> None:
+    def __init__(self, output_file: Text, supported_extensions: List[Text] = None) -> None:
         self.output_file = output_file
         self.supported_extensions = supported_extensions
-        self.input_suffix = input_suffix
 
     def validate_output_file(self) -> Text:
         if FileUtilities.is_valid_parent_directory(self.output_file):
@@ -42,9 +41,6 @@ class OutputUtilities:
         
         if self.supported_extensions and output_suffix not in self.supported_extensions:
             raise ValueError(f"Output file must have one of the following extensions: {', '.join(self.supported_extensions)}")
-
-        if self.input_suffix and output_suffix != self.input_suffix:
-            raise ValueError("Output file must have the same extension as the input file.")
 
 
 class URLUtilities:
