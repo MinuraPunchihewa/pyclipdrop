@@ -1,11 +1,11 @@
+from typing import Text
 from pathlib import Path
-from typing import Text, Bool
 from urllib.parse import urlparse
 
 
 class URLUtilities:
     @staticmethod
-    def is_valid_url(url: Text) -> Bool:
+    def is_valid_url(url: Text) -> bool:
         try:
             result = urlparse(url)
             return all([result.scheme, result.netloc])
@@ -19,10 +19,10 @@ class URLUtilities:
 
 class FileUtilities:
     @staticmethod
-    def is_valid_file_path(file_path: Text) -> Bool:
+    def is_valid_file_path(file_path: Text) -> bool:
         return Path(file_path).exists()
     
-    def is_valid_parent_directory(file_path: Text) -> Bool:
+    def is_valid_parent_directory(file_path: Text) -> bool:
         return Path(file_path).parent.exists()
     
     @staticmethod
