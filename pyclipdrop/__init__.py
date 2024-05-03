@@ -1,1 +1,1 @@
-from pyclipdrop.client import PyClipdropClient
+from pyclipdrop.client import ClipdropClient
