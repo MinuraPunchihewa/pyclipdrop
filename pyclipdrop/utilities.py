@@ -25,6 +25,26 @@ class InputUtilities:
             raise ValueError(f"Input file must have one of the following extensions: {', '.join(self.supported_extensions)}")
 
         return image_data, input_suffix
+    
+
+class OutputUtilities:
+    def __init__(self, output_file: Text, supported_extensions: List[Text] = None, input_suffix: Text = None) -> None:
+        self.output_file = output_file
+        self.supported_extensions = supported_extensions
+        self.input_suffix = input_suffix
+
+    def validate_output_file(self) -> Text:
+        if FileUtilities.is_valid_parent_directory(self.output_file):
+            output_suffix = FileUtilities.get_suffix_from_file_path(self.output_file)
+
+        else:
+            raise ValueError("The path to the output file does not exist.")
+        
+        if self.supported_extensions and output_suffix not in self.supported_extensions:
+            raise ValueError(f"Output file must have one of the following extensions: {', '.join(self.supported_extensions)}")
+
+        if self.input_suffix and output_suffix != self.input_suffix:
+            raise ValueError("Output file must have the same extension as the input file.")
 
 
 class URLUtilities:
