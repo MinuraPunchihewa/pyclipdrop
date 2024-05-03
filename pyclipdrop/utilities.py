@@ -22,6 +22,9 @@ class FileUtilities:
     def is_valid_file_path(file_path: Text) -> Bool:
         return Path(file_path).exists()
     
+    def is_valid_parent_directory(file_path: Text) -> Bool:
+        return Path(file_path).parent.exists()
+    
     @staticmethod
     def get_suffix_from_file_path(file_path: Text) -> Text:
         return Path(file_path).suffix
