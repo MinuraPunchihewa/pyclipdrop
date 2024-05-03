@@ -2,7 +2,6 @@ import os
 import io
 import requests
 from typing import Text
-from pathlib import Path
 
 from pyclipdrop.settings import settings
 from pyclipdrop.utilities import InputUtilities, OutputUtilities
