@@ -4,6 +4,7 @@ from typing import Text
 from pathlib import Path
 
 from pyclipdrop.settings import settings
+from pyclipdrop.utilities import FileUtilities, URLUtilities
 
 
 # TODO: Add docstrings
@@ -19,15 +20,13 @@ class PyClipdropClient:
         self.version = version
 
     def text_to_image(self, prompt: Text, output_file: Text = 'output.png'):
-        output_path = Path(output_file)
+        # Check if the path to the file exists
+        if not FileUtilities.is_valid_parent_directory(output_file):
+            raise ValueError("The path to the output file does not exist.")
 
         # Check if the output file has a .png extension
-        if output_path.suffix != '.png':
+        if FileUtilities.get_suffix_from_file_path(output_file) != '.png':
             raise ValueError("Output file must be a .png file.")
-        
-        # Check if the path to the file exists
-        if not output_path.parent.exists():
-            raise ValueError("The path to the output file does not exist.")
 
         response = requests.post(
             f'{self.base_url}/text-to-image/{self.version}',
