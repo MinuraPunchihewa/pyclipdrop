@@ -1,5 +1,4 @@
 import os
-import io
 import requests
 from typing import Text, Dict
 
