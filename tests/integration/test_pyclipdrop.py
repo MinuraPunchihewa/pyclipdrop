@@ -19,6 +19,23 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.png'))
 
+    def test_replace_background(self):
+        self.client.replace_background(
+            input_file='tests/integration/input/wine.jpg',
+            prompt='a cozy marble kitchen with wine glasses',
+            output_file='tests/integration/output/output.jpg'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
+
+    def test_remove_background(self):
+        self.client.remove_background(
+            input_file='tests/integration/input/car.jpg',
+            output_file='tests/integration/output/output.png'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.png'))
+
 
 if __name__ == '__main__':
     unittest.main()
