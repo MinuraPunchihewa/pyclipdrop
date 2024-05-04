@@ -44,6 +44,14 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.png'))
 
+    def test_reimagine(self):
+        self.client.reimagine(
+            input_file='tests/integration/input/apartment.webp',
+            output_file='tests/integration/output/output.jpeg'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.jpeg'))
+
 
 if __name__ == '__main__':
     unittest.main()
