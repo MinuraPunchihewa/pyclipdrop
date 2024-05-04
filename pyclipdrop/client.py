@@ -44,21 +44,14 @@ class ClipdropClient:
         # Check if the output file is valid
         OutputUtilities(output_file, supported_extensions=['.png']).validate_output_file()
 
-        response = requests.post(
-            f'{self.base_url}/text-to-image/{self.version}',
+        response = self._submit_request(
+            'text-to-image',
             files={
                 'prompt': (None, prompt, 'text/plain')
-            },
-            headers={
-                'x-api-key': self.api_key
             }
         )
 
-        if (response.ok):
-            with open(output_file, 'wb') as f:
-                f.write(response.content)
-        else:
-            response.raise_for_status()
+        self._save_response(response, output_file)
 
     def replace_background(self, input_file: Text, prompt: Text, output_file: Text = None):
         """
@@ -85,24 +78,17 @@ class ClipdropClient:
         # Check if the output file is valid
         OutputUtilities(output_file, supported_extensions=[input_suffix]).validate_output_file()
 
-        response = requests.post(
-            f'{self.base_url}/replace-background/{self.version}',
+        response = self._submit_request(
+            'replace-background',
             files={
-                'image_file': (input_file, io.BytesIO(image_data), f'image/{input_suffix[1:]}')
+                'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
             },
             data={
                 'prompt': prompt
-            },
-            headers={
-                'x-api-key': self.api_key
             }
         )
 
-        if (response.ok):
-            with open(output_file, 'wb') as f:
-                f.write(response.content)
-        else:
-            response.raise_for_status()
+        self._save_response(response, output_file)
         
     def remove_background(self, input_file: Text, output_file: Text = 'output.png'):
         """
@@ -124,21 +110,14 @@ class ClipdropClient:
         # Check if the output file is valid
         OutputUtilities(output_file, supported_extensions=['.png', '.jpg', '.webp']).validate_output_file()
 
-        response = requests.post(
-            f'{self.base_url}/remove-background/{self.version}',
+        response = self._submit_request(
+            'remove-text',
             files={
                 'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
-            },
-            headers={
-                'x-api-key': self.api_key
             }
         )
 
-        if (response.ok):
-            with open(output_file, 'wb') as f:
-                f.write(response.content)
-        else:
-            response.raise_for_status()
+        self._save_response(response, output_file)
 
     def remove_text(self, input_file: Text, output_file: Text = 'output.png'):
         """
@@ -160,21 +139,14 @@ class ClipdropClient:
         # Check if the output file is valid
         OutputUtilities(output_file, supported_extensions=['.png']).validate_output_file()
 
-        response = requests.post(
-            f'{self.base_url}/remove-text/{self.version}',
+        response = self._submit_request(
+            'remove-text',
             files={
                 'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
-            },
-            headers={
-                'x-api-key': self.api_key
             }
         )
 
-        if (response.ok):
-            with open(output_file, 'wb') as f:
-                f.write(response.content)
-        else:
-            response.raise_for_status()
+        self._save_response(response, output_file)
 
     def _submit_request(self, endpoint: Text, files: Dict, data: Dict) -> requests.Response:
         """
