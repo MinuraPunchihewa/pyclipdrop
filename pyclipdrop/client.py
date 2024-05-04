@@ -45,7 +45,7 @@ class ClipdropClient:
         OutputUtilities(output_file, supported_extensions=['.png']).validate_output_file()
 
         response = self._submit_request(
-            'text-to-image',
+            f'{self.base_url}/text-to-image/{self.version}',
             files={
                 'prompt': (None, prompt, 'text/plain')
             }
@@ -79,7 +79,7 @@ class ClipdropClient:
         OutputUtilities(output_file, supported_extensions=[input_suffix]).validate_output_file()
 
         response = self._submit_request(
-            'replace-background',
+            f'{self.base_url}/replace-background/{self.version}',
             files={
                 'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
             },
@@ -111,7 +111,7 @@ class ClipdropClient:
         OutputUtilities(output_file, supported_extensions=['.png', '.jpg', '.webp']).validate_output_file()
 
         response = self._submit_request(
-            'remove-text',
+            f'{self.base_url}/remove-background/{self.version}',
             files={
                 'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
             }
@@ -140,7 +140,7 @@ class ClipdropClient:
         OutputUtilities(output_file, supported_extensions=['.png']).validate_output_file()
 
         response = self._submit_request(
-            'remove-text',
+            f'{self.base_url}/remove-text/{self.version}',
             files={
                 'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
             }
@@ -169,7 +169,7 @@ class ClipdropClient:
         OutputUtilities(output_file, supported_extensions=['.jpeg']).validate_output_file()
 
         response = self._submit_request(
-            'reimagine',
+            f'{self.base_url}/reimagine/{self.version}/reimagine',
             files={
                 'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
             }
@@ -177,7 +177,7 @@ class ClipdropClient:
 
         self._save_response(response, output_file)
 
-    def _submit_request(self, endpoint: Text, files: Dict, data: Dict = None) -> requests.Response:
+    def _submit_request(self, url: Text, files: Dict, data: Dict = None) -> requests.Response:
         """
         Submit a request to the Clipdrop API.
 
@@ -194,7 +194,7 @@ class ClipdropClient:
         """
 
         response = requests.post(
-            f'{self.base_url}/{endpoint}/{self.version}',
+            url,
             files=files,
             data=data,
             headers={
