@@ -139,3 +139,39 @@ class ClipdropClient:
                 f.write(response.content)
         else:
             response.raise_for_status()
+
+    def remove_text(self, input_file: Text, output_file: Text = 'output.png'):
+        """
+        Remove the text from an image.
+
+        Args:
+            input_file (Text): The name of the input file. The supported extensions are PNG or JPG
+            output_file (Text): The name of the output file. The default value is 'output.png'. Only PNG files are supported as output files.
+
+        Raises:
+            ValueError: If the input file does not exist or the extension is not supported.
+            ValueError: If the path to the output file is not valid or the extension is not PNG.
+            requests.exceptions.HTTPError: If the API request fails.
+        """
+
+        # get input data and suffix if the input file is valid
+        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg']).get_data_and_suffix()
+
+        # Check if the output file is valid
+        OutputUtilities(output_file, supported_extensions=['.png']).validate_output_file()
+
+        response = requests.post(
+            f'{self.base_url}/remove-text/{self.version}',
+            files={
+                'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
+            },
+            headers={
+                'x-api-key': self.api_key
+            }
+        )
+
+        if (response.ok):
+            with open(output_file, 'wb') as f:
+                f.write(response.content)
+        else:
+            response.raise_for_status()
