@@ -7,7 +7,6 @@ from pyclipdrop.settings import settings
 from pyclipdrop.utilities import InputUtilities, OutputUtilities
 
 
-# TODO: Add docstrings
 class ClipdropClient:
     """
     The client class for the Clipdrop API.
