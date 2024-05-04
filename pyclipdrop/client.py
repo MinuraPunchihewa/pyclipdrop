@@ -177,7 +177,7 @@ class ClipdropClient:
 
         self._save_response(response, output_file)
 
-    def _submit_request(self, endpoint: Text, files: Dict, data: Dict) -> requests.Response:
+    def _submit_request(self, endpoint: Text, files: Dict, data: Dict = None) -> requests.Response:
         """
         Submit a request to the Clipdrop API.
 
