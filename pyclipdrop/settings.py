@@ -6,14 +6,9 @@ class PyClipdropSettings(BaseSettings):
     """
     Settings for the PyClipdrop package.
 
-    Attributes
-    ----------
-
-    BASE_URL : Text
-        Base URL for the Clipdrop API.
-
-    VERSION : Text
-        Version of the Clipdrop API.
+    Attributes:
+        BASE_URL (Text): Base URL for the Clipdrop API.
+        VERSION (Text): Version of the Clipdrop API.
     """
 
     BASE_URL: Text = "https://clipdrop-api.co"
