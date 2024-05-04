@@ -148,13 +148,13 @@ class ClipdropClient:
 
         self._save_response(response, output_file)
 
-    def reimagine(self, input_file: Text, output_file: Text = 'output.jpeg'):
+    def reimagine(self, input_file: Text, output_file: Text = 'output.jpg'):
         """
         Reimagine an image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPEG, and WEBP.
-            output_file (Text): The name of the output file. The default value is 'output.jpeg'. The only supported extension is JPEG.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -163,15 +163,46 @@ class ClipdropClient:
         """
 
         # get input data and suffix if the input file is valid
-        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpeg', '.webp']).get_data_and_suffix()
+        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg', '.webp']).get_data_and_suffix()
 
         # Check if the output file is valid
-        OutputUtilities(output_file, supported_extensions=['.jpeg']).validate_output_file()
+        OutputUtilities(output_file, supported_extensions=['.jpg']).validate_output_file()
 
         response = self._submit_request(
             f'{self.base_url}/reimagine/{self.version}/reimagine',
             files={
                 'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
+            }
+        )
+
+        self._save_response(response, output_file)
+
+    def sketch_to_image(self, input_file: Text, prompt: Text, output_file: Text = 'output.png'):
+        """
+        Generate an image from a sketch.
+
+        Args:
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            prompt (Text): The text prompt describing the image to generate.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+
+        Raises:
+            ValueError: If the input file does not exist or the extension is not supported.
+            ValueError: If the path to the output file is not valid or the extension is not PNG.
+            requests.exceptions.HTTPError: If the API request fails.
+        """
+
+        # get input data and suffix if the input file is valid
+        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg', '.webp']).get_data_and_suffix()
+
+        # Check if the output file is valid
+        OutputUtilities(output_file, supported_extensions=['.jpg']).validate_output_file()
+
+        response = self._submit_request(
+            f'{self.base_url}/sketch-to-image/{self.version}/sketch-to-image',
+            files={
+                'image_file': (input_file, image_data, f'image/{input_suffix[1:]}'),
+                'prompt': (None, prompt, 'text/plain')
             }
         )
 
