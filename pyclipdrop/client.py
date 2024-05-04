@@ -176,13 +176,14 @@ class ClipdropClient:
         else:
             response.raise_for_status()
 
-    def _submit_request(self, endpoint: Text, files: Dict) -> requests.Response:
+    def _submit_request(self, endpoint: Text, files: Dict, data: Dict) -> requests.Response:
         """
         Submit a request to the Clipdrop API.
 
         Args:
             endpoint (Text): The endpoint of the API to submit the request to.
             files (Dict): A dictionary of files to submit with the request.
+            data (Dict): A dictionary of data to submit with the request.
 
         Returns:
             requests.Response: The response object from the API request.
@@ -194,6 +195,7 @@ class ClipdropClient:
         response = requests.post(
             f'{self.base_url}/{endpoint}/{self.version}',
             files=files,
+            data=data,
             headers={
                 'x-api-key': self.api_key
             }
