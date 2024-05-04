@@ -52,6 +52,15 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.jpeg'))
 
+    def test_sketch_to_image(self):
+        self.client.sketch_to_image(
+            input_file='tests/integration/input/owl.webp',
+            prompt='an owl on a branch, cinematic',
+            output_file='tests/integration/output/output.jpg'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
+
 
 if __name__ == '__main__':
     unittest.main()
