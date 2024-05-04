@@ -36,6 +36,14 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.png'))
 
+    def test_remove_text(self):
+        self.client.remove_text(
+            input_file='tests/integration/input/billboard.jpg',
+            output_file='tests/integration/output/output.png'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.png'))
+
 
 if __name__ == '__main__':
     unittest.main()
