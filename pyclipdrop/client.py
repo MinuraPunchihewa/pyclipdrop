@@ -1,7 +1,7 @@
 import os
 import io
 import requests
-from typing import Text
+from typing import Text, Dict
 
 from pyclipdrop.settings import settings
 from pyclipdrop.utilities import InputUtilities, OutputUtilities
@@ -175,3 +175,42 @@ class ClipdropClient:
                 f.write(response.content)
         else:
             response.raise_for_status()
+
+    def _submit_request(self, endpoint: Text, files: Dict) -> requests.Response:
+        """
+        Submit a request to the Clipdrop API.
+
+        Args:
+            endpoint (Text): The endpoint of the API to submit the request to.
+            files (Dict): A dictionary of files to submit with the request.
+
+        Returns:
+            requests.Response: The response object from the API request.
+
+        Raises:
+            requests.exceptions.HTTPError: If the API request fails.
+        """
+
+        response = requests.post(
+            f'{self.base_url}/{endpoint}/{self.version}',
+            files=files,
+            headers={
+                'x-api-key': self.api_key
+            }
+        )
+
+        response.raise_for_status()
+
+        return response
+    
+    def _save_response(self, response: requests.Response, output_file: Text) -> None:
+        """
+        Save the content of a response object to a file.
+
+        Args:
+            response (requests.Response): The response object to save.
+            output_file (Text): The name of the output file.
+        """
+
+        with open(output_file, 'wb') as f:
+            f.write(response.content)
