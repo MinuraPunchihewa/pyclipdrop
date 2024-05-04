@@ -42,7 +42,7 @@ class ClipdropClient:
         """
 
         # Check if the output file is valid
-        OutputUtilities(output_file, supported_extensions=['.png']).validate_output_file()
+        OutputUtilities.validate_output_file(output_file, supported_extensions=['.png'])
 
         response = self._submit_request(
             f'{self.base_url}/text-to-image/{self.version}',
@@ -69,14 +69,14 @@ class ClipdropClient:
         """
 
         # get input data and suffix if the input file is valid
-        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg', '.webp']).get_data_and_suffix()
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # If the output file is not specified, use 'output' with the same extension as the input file
         if not output_file:
             output_file = f'output{input_suffix}'
 
         # Check if the output file is valid
-        OutputUtilities(output_file, supported_extensions=[input_suffix]).validate_output_file()
+        OutputUtilities.validate_output_file(output_file, supported_extensions=[input_suffix])
 
         response = self._submit_request(
             f'{self.base_url}/replace-background/{self.version}',
@@ -105,10 +105,10 @@ class ClipdropClient:
         """
 
         # get input data and suffix if the input file is valid
-        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg', '.webp']).get_data_and_suffix()
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the output file is valid
-        OutputUtilities(output_file, supported_extensions=['.png', '.jpg', '.webp']).validate_output_file()
+        OutputUtilities.validate_output_file(output_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         response = self._submit_request(
             f'{self.base_url}/remove-background/{self.version}',
@@ -134,10 +134,10 @@ class ClipdropClient:
         """
 
         # get input data and suffix if the input file is valid
-        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg']).get_data_and_suffix()
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg'])
 
         # Check if the output file is valid
-        OutputUtilities(output_file, supported_extensions=['.png']).validate_output_file()
+        OutputUtilities.validate_output_file(output_file, supported_extensions=['.png'])
 
         response = self._submit_request(
             f'{self.base_url}/remove-text/{self.version}',
@@ -163,10 +163,10 @@ class ClipdropClient:
         """
 
         # get input data and suffix if the input file is valid
-        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg', '.webp']).get_data_and_suffix()
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the output file is valid
-        OutputUtilities(output_file, supported_extensions=['.jpg']).validate_output_file()
+        OutputUtilities.validate_output_file(output_file, supported_extensions=['.jpg'])
 
         response = self._submit_request(
             f'{self.base_url}/reimagine/{self.version}/reimagine',
@@ -193,10 +193,10 @@ class ClipdropClient:
         """
 
         # get input data and suffix if the input file is valid
-        image_data, input_suffix = InputUtilities(input_file, supported_extensions=['.png', '.jpg', '.webp']).get_data_and_suffix()
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the output file is valid
-        OutputUtilities(output_file, supported_extensions=['.jpg']).validate_output_file()
+        OutputUtilities.validate_output_file(output_file, supported_extensions=['.jpg'])
 
         response = self._submit_request(
             f'{self.base_url}/sketch-to-image/{self.version}/sketch-to-image',
