@@ -207,6 +207,45 @@ class ClipdropClient:
 
         self._save_response(response, output_file)
 
+    def uncrop(self, input_file: Text, extend_up: int = 0, extend_down: int = 0, extend_left: int = 0, extend_right: int = 0, output_file: Text = 'output.jpg'):
+        """
+        Generate new extensions of an image.
+
+        Args:
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            extend_up (int): The number of pixels to extend the canvas up. The default value is 0.
+            extend_down (int): The number of pixels to extend the canvas down. The default value is 0.
+            extend_left (int): The number of pixels to extend the canvas left. The default value is 0.
+            extend_right (int): The number of pixels to extend the canvas right. The default value is 0.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+
+        Raises:
+            ValueError: If the input file does not exist or the extension is not supported.
+            ValueError: If the path to the output file is not valid or the extension is not supported.
+            requests.exceptions.HTTPError: If the API request fails.
+        """
+
+        # get input data and suffix if the input file is valid
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+
+        # Check if the output file is valid
+        OutputUtilities.validate_output_file(output_file, supported_extensions=['.jpg'])
+
+        response = self._submit_request(
+            f'{self.base_url}/uncrop/{self.version}',
+            files={
+                'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
+            },
+            data={
+                'extend_up': extend_up,
+                'extend_down': extend_down,
+                'extend_left': extend_left,
+                'extend_right': extend_right
+            }
+        )
+
+        self._save_response(response, output_file)
+
     def _submit_request(self, url: Text, files: Dict, data: Dict = None) -> requests.Response:
         """
         Submit a request to the Clipdrop API.

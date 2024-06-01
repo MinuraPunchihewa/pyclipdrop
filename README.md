@@ -55,5 +55,5 @@ client.remove_text(
 )
 ```
 
-# License
+## License
 This code is licensed under the GNU GENERAL PUBLIC LICENSE. See LICENSE.txt for details.
