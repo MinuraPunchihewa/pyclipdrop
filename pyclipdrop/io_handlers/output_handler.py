@@ -17,6 +17,3 @@ class OutputHandler:
         
         if self.supported_extensions and self.output_extension not in self.supported_extensions:
             raise ValueError(f"Output file must have one of the following extensions: {', '.join(self.supported_extensions)}")
-
-    def get_extension(self) -> Text:
-        return self.output_extension
