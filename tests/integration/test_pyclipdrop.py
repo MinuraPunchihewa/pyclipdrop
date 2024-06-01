@@ -97,6 +97,14 @@ class TestClipdropClient(unittest.TestCase):
         )
 
         self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
+
+    def test_portrait_surface_normals(self):
+        self.client.portrait_surface_normals(
+            input_file='tests/integration/input/portrait.jpg',
+            output_file='tests/integration/output/output.jpg'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
     
 
 if __name__ == '__main__':
