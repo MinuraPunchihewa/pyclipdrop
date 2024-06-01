@@ -68,9 +68,8 @@ class ClipdropClient:
             ValueError: If the path to the output file is not valid or the extension does not match that of the input file.
             requests.exceptions.HTTPError: If the API request fails.       
         """
-        # Initialize the input and output handlers
+        # Initialize the input handler
         input_handler = InputHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
-        output_handler = OutputHandler(output_file, supported_extensions=['.png'])
 
         # Check if the input file is valid
         input_handler.validate()
@@ -82,6 +81,9 @@ class ClipdropClient:
         # If the output file is not specified, use 'output' with the same extension as the input file
         if not output_file:
             output_file = f'output{input_extension}'
+
+        # Initialize the output handler
+        output_handler = OutputHandler(output_file, supported_extensions=[input_extension])
 
         # Check if the output file is valid
         output_handler.validate()
@@ -224,6 +226,9 @@ class ClipdropClient:
         input_handler = InputHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
         output_handler = OutputHandler(output_file, supported_extensions=['.jpg'])
 
+        # Check if the input file is valid
+        input_handler.validate()
+
         # Get input data and suffix
         image_data = input_handler.get_data()
         input_extension = input_handler.get_extension()
@@ -261,6 +266,9 @@ class ClipdropClient:
         # Initialize the input and output handlers
         input_handler = InputHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
         output_handler = OutputHandler(output_file, supported_extensions=['.jpg'])
+
+        # Check if the input file is valid
+        input_handler.validate()
 
         # Get input data and suffix
         image_data = input_handler.get_data()
