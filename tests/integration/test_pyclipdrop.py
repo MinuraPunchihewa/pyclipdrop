@@ -81,6 +81,15 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
 
+    def test_cleanup(self):
+        self.client.cleanup(
+            input_file='tests/integration/input/jeep_in_desert.jpg',
+            mask_file='tests/integration/input/jeep_in_desert_mask.png',
+            output_file='tests/integration/output/output.png'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.png'))
+
 
 if __name__ == '__main__':
     unittest.main()
