@@ -26,12 +26,51 @@ client = ClipdropClient()
 
 This client can now be used to perform a variety of tasks.
 
-### Text to Image
+### Cleanup
 
 ```python
-client.text_to_image(
-    prompt='shot of vaporwave fashion dog in miami',
+client.cleanup(
+    image_file='path/to/input.png',
+    mask_file='path/to/mask.png',
     output_file='path/to/output.png'
+)
+```
+
+### Image Upscaling
+
+```python
+client.image_upscaling(
+    image_file='path/to/input.png',
+    target_width=1920,
+    target_height=1080,
+    output_file='path/to/output.png'
+)
+```
+
+### Portrait Depth Estimation
+
+```python
+client.portrait_depth_estimation(
+    image_file='path/to/input.png',
+    output_file='path/to/output.jpg'
+)
+```
+
+### Portrait Surface Normals
+
+```python
+client.portrait_surface_normals(
+    image_file='path/to/input.png',
+    output_file='path/to/output.jpg'
+)
+```
+
+### Reimagine
+
+```python
+client.reimagine(
+    image_file='path/to/input.png',
+    output_file='path/to/output.jpg'
 )
 ```
 
@@ -39,6 +78,15 @@ client.text_to_image(
 
 ```python
 client.remove_background(
+    image_file='path/to/input.png',
+    output_file='path/to/output.png'
+)
+```
+
+### Remove Text
+
+```python
+client.remove_text(
     image_file='path/to/input.png',
     output_file='path/to/output.png'
 )
@@ -54,12 +102,44 @@ client.replace_background(
 )
 ```
 
-### Remove Text
+### Sketch to Image
 
 ```python
-client.remove_text(
+client.sketch_to_image(
     image_file='path/to/input.png',
+    prompt='an owl on a branch, cinematic',
+    output_file='path/to/output.jpg'
+)
+```
+
+### Text Inpainting
+
+```python
+client.text_inpainting(
+    image_file='path/to/input.png',
+    mask_file='path/to/mask.png',
+    prompt='A woman with a red scarf',
+    output_file='path/to/output.jpg'
+)
+```
+
+### Text to Image
+
+```python
+client.text_to_image(
+    prompt='shot of vaporwave fashion dog in miami',
     output_file='path/to/output.png'
+)
+```
+
+### Uncrop
+
+```python
+client.uncrop(
+    image_file='path/to/input.png',
+    extend_left=120,
+    extend_right=-50,
+    output_file='path/to/output.jpg'
 )
 ```
 
