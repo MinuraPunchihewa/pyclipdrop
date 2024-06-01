@@ -239,7 +239,7 @@ class ClipdropClient:
         response = self._submit_request(
             f'{self.base_url}/sketch-to-image/{self.version}/sketch-to-image',
             files={
-                'image_file': (input_file, image_data, f'image/{input_extension[1:]}'),
+                'sketch_file': (input_file, image_data, f'image/{input_extension[1:]}'),
                 'prompt': (None, prompt, 'text/plain')
             }
         )
