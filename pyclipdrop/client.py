@@ -6,7 +6,7 @@ from pyclipdrop.settings import settings
 from pyclipdrop.io_handlers import InputHandler, OutputHandler
 
 
-# TODO: Add more validations: image size, maximum height and width, etc.
+# TODO: Add more validations: image size, maximum height and width, square images, etc.
 # TODO: When API request fails, raise errors with the response content
 class ClipdropClient:
     """
@@ -61,7 +61,7 @@ class ClipdropClient:
         Replace the background of an image with a new background.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
             prompt (Text): The text prompt to generate the new background from.
             output_file (Text): The name of the output file. The default value is 'output' with the same extension as the input file. The extension of the output file must match the extension of the input file.
 
@@ -107,8 +107,8 @@ class ClipdropClient:
         Remove the background of an image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
-            output_file (Text): The name of the output file. The default value is 'output.png'. The supported extensions are PNG, JPG, and WEBP.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
+            output_file (Text): The name of the output file. The default value is 'output.png'. The supported extensions are PNG, JPG (JPEG), and WEBP.
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -143,7 +143,7 @@ class ClipdropClient:
         Remove the text from an image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG or JPG
+            input_file (Text): The name of the input file. The supported extensions are PNG or JPG (JPEG).
             output_file (Text): The name of the output file. The default value is 'output.png'. The only supported extension is PNG.
 
         Raises:
@@ -179,8 +179,8 @@ class ClipdropClient:
         Reimagine an image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
-            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG (JPEG).
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -215,9 +215,9 @@ class ClipdropClient:
         Generate an image from a sketch.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
             prompt (Text): The text prompt describing the image to generate.
-            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG (JPEG).
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -253,12 +253,12 @@ class ClipdropClient:
         Generate new extensions of an image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
             extend_up (int): The number of pixels to extend the canvas up. The default value is 0.
             extend_down (int): The number of pixels to extend the canvas down. The default value is 0.
             extend_left (int): The number of pixels to extend the canvas left. The default value is 0.
             extend_right (int): The number of pixels to extend the canvas right. The default value is 0.
-            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG (JPEG).
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -299,10 +299,10 @@ class ClipdropClient:
         Upscale an image to a target width and height.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
             target_width (int): The target width of the output image in pixels.
             target_height (int): The target height of the output image in pixels.
-            output_file (Text): The name of the output file. The default value is None, but if not specified, the output file will be 'output' with the relevant extension. The extension of the output file should be in the WEBP format if the image contains transparency, otherwise it should be in the JPG.
+            output_file (Text): The name of the output file. The default value is None, but if not specified, the output file will be 'output' with the relevant extension. The extension of the output file should be in the WEBP format if the image contains transparency, otherwise it should be in the JPG (JPEG).
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -350,7 +350,7 @@ class ClipdropClient:
         Clean up an image using a mask.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG and JPG.
+            input_file (Text): The name of the input file. The supported extensions are PNG and JPG (JPEG).
             mask_file (Text): The name of the mask file. The only supported extension is PNG.
             mode (Text): The mode to use for cleaning up the image. The default value is 'fast'. The supported modes are 'fast' and 'quality'.
             output_file (Text): The name of the output file. The default value is 'output.png'. The only supported extension is PNG.
@@ -404,8 +404,8 @@ class ClipdropClient:
         Estimate the depth of a portrait image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
-            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG (JPEG).
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -440,8 +440,8 @@ class ClipdropClient:
         Generate surface normals of a portrait image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
-            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG (JPEG).
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -476,10 +476,10 @@ class ClipdropClient:
         Inpaint text in an image.
 
         Args:
-            input_file (Text): The name of the input file. The supported extensions are PNG and JPG.
+            input_file (Text): The name of the input file. The supported extensions are PNG and JPG (JPEG).
             mask_file (Text): The name of the mask file. The only supported extension is PNG.
             prompt (Text): The text prompt to generate the inpainted text.
-            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG.
+            output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG (JPEG).
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
