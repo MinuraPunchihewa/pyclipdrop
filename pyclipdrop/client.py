@@ -59,7 +59,7 @@ class ClipdropClient:
         Args:
             input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
             prompt (Text): The text prompt to generate the new background from.
-            output_file (Text): The name of the output file. The default value is 'output' with the same extension as the input file.The extension of the output file must match the extension of the input file.
+            output_file (Text): The name of the output file. The default value is 'output' with the same extension as the input file. The extension of the output file must match the extension of the input file.
 
         Raises:
             ValueError: If the input file does not exist or the extension is not supported.
@@ -67,7 +67,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.       
         """
 
-        # get input data and suffix if the input file is valid
+        # Get input data and suffix if the input file is valid
         image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # If the output file is not specified, use 'output' with the same extension as the input file
@@ -103,7 +103,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
 
-        # get input data and suffix if the input file is valid
+        # Get input data and suffix if the input file is valid
         image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the output file is valid
@@ -132,7 +132,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
 
-        # get input data and suffix if the input file is valid
+        # Get input data and suffix if the input file is valid
         image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg'])
 
         # Check if the output file is valid
@@ -161,7 +161,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
 
-        # get input data and suffix if the input file is valid
+        # Get input data and suffix if the input file is valid
         image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the output file is valid
@@ -191,7 +191,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
 
-        # get input data and suffix if the input file is valid
+        # Get input data and suffix if the input file is valid
         image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the output file is valid
@@ -225,7 +225,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
 
-        # get input data and suffix if the input file is valid
+        # Get input data and suffix if the input file is valid
         image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the output file is valid
@@ -243,6 +243,48 @@ class ClipdropClient:
                 'extend_right': extend_right
             }
         )
+
+        self._save_response(response, output_file)
+
+    def image_upscaling(self, input_file: Text, target_width: int, target_height: int, output_file: Text = None):
+        """
+        Upscale an image to a target width and height.
+
+        Args:
+            input_file (Text): The name of the input file. The supported extensions are PNG, JPG, and WEBP.
+            target_width (int): The target width of the output image in pixels.
+            target_height (int): The target height of the output image in pixels.
+            output_file (Text): The name of the output file. The default value is None, but if not specified, the output file will be 'output' with the relevant extension. The extension of the output file should be in the WEBP format if the image contains transparency, otherwise it should be in the JPG.
+
+        Raises:
+            ValueError: If the input file does not exist or the extension is not supported.
+            ValueError: If the path to the output file is not valid or the extension is not supported.
+            requests.exceptions.HTTPError: If the API request fails.
+        """
+
+        # Get input data and suffix if the input file is valid
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+
+        response = self._submit_request(
+            f'{self.base_url}/image-upscaling/{self.version}/upscale',
+            files={
+                'image_file': (input_file, image_data, f'image/{input_suffix[1:]}')
+            },
+            data={
+                'target_width': target_width,
+                'target_height': target_height
+            }
+        )
+
+        # Get the output file extension from the response content type
+        expected_output_suffix = '.webp' if 'image/webp' in response.headers['Content-Type'] else '.jpg'
+
+        # If the output file is not specified, use 'output' with the above extension
+        if not output_file:
+            output_file = f'output{expected_output_suffix}'
+
+        # Check if the output file is valid
+        OutputUtilities.validate_output_file(output_file, supported_extensions=[expected_output_suffix])
 
         self._save_response(response, output_file)
 
