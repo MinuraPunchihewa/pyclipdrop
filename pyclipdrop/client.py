@@ -288,6 +288,49 @@ class ClipdropClient:
 
         self._save_response(response, output_file)
 
+    def cleanup(self, input_file: Text, mask_file: Text, mode: Text = 'fast', output_file: Text = 'output.png'):
+        """
+        Clean up an image using a mask.
+
+        Args:
+            input_file (Text): The name of the input file. The supported extensions are PNG and JPG.
+            mask_file (Text): The name of the mask file. The only supported extension is PNG.
+            mode (Text): The mode to use for cleaning up the image. The default value is 'fast'. The supported modes are 'fast' and 'quality'.
+            output_file (Text): The name of the output file. The default value is 'output.png'. The only supported extension is PNG.
+
+        Raises:
+            ValueError: If the input file does not exist or the extension is not supported.
+            ValueError: If the mask file does not exist or the extension is not supported.
+            ValueError: If the path to the output file is not valid or the extension is not PNG.
+            requests.exceptions.HTTPError: If the API request fails.
+        """
+
+        # Get input data and suffix if the input file is valid
+        image_data, input_suffix = InputUtilities.get_data_and_suffix(input_file, supported_extensions=['.png', '.jpg'])
+
+        # Get mask data and suffix if the mask file is valid
+        mask_data, mask_suffix = InputUtilities.get_data_and_suffix(mask_file, supported_extensions=['.png'])
+
+        # Check if the output file is valid
+        OutputUtilities.validate_output_file(output_file, supported_extensions=['.png'])
+
+        # Check if the mode is valid
+        if mode not in ['fast', 'quality']:
+            raise ValueError("The mode must be either 'fast' or 'quality'.")
+
+        response = self._submit_request(
+            f'{self.base_url}/cleanup/{self.version}',
+            files={
+                'image_file': (input_file, image_data, f'image/{input_suffix[1:]}'),
+                'mask_file': (mask_file, mask_data, f'image/{mask_suffix[1:]}')
+            },
+            data={
+                'mode': mode
+            }
+        )
+
+        self._save_response(response, output_file)
+
     def _submit_request(self, url: Text, files: Dict, data: Dict = None) -> requests.Response:
         """
         Submit a request to the Clipdrop API.
