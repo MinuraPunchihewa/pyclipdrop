@@ -1,5 +1,5 @@
 from typing import Text, List
-from pyclipdrop.utilities import URLUtilities, FileUtilities, ExtensionUtilities
+from pyclipdrop.utilities import URLUtilities, FileUtilities
 
 
 class InputHandler:
