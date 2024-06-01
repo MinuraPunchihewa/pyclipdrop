@@ -71,6 +71,16 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
 
+    def test_image_upscaling(self):
+        self.client.image_upscaling(
+            input_file='tests/integration/input/apartment.webp',
+            target_height=1000,
+            target_width=1000,
+            output_file='tests/integration/output/output.jpg'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
+
 
 if __name__ == '__main__':
     unittest.main()
