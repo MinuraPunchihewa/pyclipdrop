@@ -6,6 +6,8 @@ from pyclipdrop.settings import settings
 from pyclipdrop.io_handlers import InputHandler, OutputHandler
 
 
+# TODO: Add more validations: image size, maximum height and width, etc.
+# TODO: When API request fails, raise errors with the response content
 class ClipdropClient:
     """
     The client class for the Clipdrop API.
