@@ -61,6 +61,16 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
 
+    def test_uncrop(self):
+        self.client.uncrop(
+            input_file='tests/integration/input/wine.jpg',
+            extend_up=200,
+            extend_down=200,
+            output_file='tests/integration/output/output.jpg'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
+
 
 if __name__ == '__main__':
     unittest.main()
