@@ -90,6 +90,14 @@ class TestClipdropClient(unittest.TestCase):
 
         self.assertTrue(os.path.exists('tests/integration/output/output.png'))
 
+    def test_portrait_depth_estimation(self):
+        self.client.portrait_depth_estimation(
+            input_file='tests/integration/input/portrait.jpg',
+            output_file='tests/integration/output/output.jpg'
+        )
+
+        self.assertTrue(os.path.exists('tests/integration/output/output.jpg'))
+    
 
 if __name__ == '__main__':
     unittest.main()
