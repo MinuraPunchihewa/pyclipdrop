@@ -54,7 +54,7 @@ class TestClipdropClient(unittest.TestCase):
 
     def test_sketch_to_image(self):
         self.client.sketch_to_image(
-            input_file='tests/integration/input/owl.webp',
+            input_file='tests/integration/input/owl.png',
             prompt='an owl on a branch, cinematic',
             output_file='tests/integration/output/output.jpg'
         )
