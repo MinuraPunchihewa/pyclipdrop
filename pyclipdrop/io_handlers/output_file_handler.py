@@ -12,16 +12,19 @@ class OutputFileHandler:
 
     def validate(self) -> None:
         if self._is_valid_parent_directory():
-            self.output_extension = self.set_extension(get_extension_from_file_path(self.output_file))
+            self.set_extension(get_extension_from_file_path(self.output_file))
 
         else:
             raise FilePathError("The path to the output file does not exist.")
         
         if not is_extension_supported(self.output_extension, self.supported_extensions):
-            raise FileExtensionError("The input file should be one of the supported extensions: " + str(self.supported_extensions))
+            raise FileExtensionError(f"The output file should be one of the supported extensions: {" ".join(self.supported_extensions)}")
         
     def _is_valid_parent_directory(self) -> bool:
         return Path(self.output_file).parent.exists()
+    
+    def set_extension(self, extension: Text) -> Text:
+        self.output_extension = extension
         
     def write(self, data: bytes) -> None:
         try:
