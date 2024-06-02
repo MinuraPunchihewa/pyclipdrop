@@ -4,7 +4,7 @@ from typing import Text, Dict
 
 from pyclipdrop.settings import settings
 from pyclipdrop.io_handlers import InputFileHandler, OutputFileHandler
-from pyclipdrop.exceptions import APIRequestError, ValueTooLongError, ValueNotSupportedError
+from pyclipdrop.exceptions import APIRequestError, ValueTooLongError, ValueNotSupportedError, ValueOutOfRangeError
 
 
 class ClipdropClient:
@@ -333,6 +333,10 @@ class ClipdropClient:
             ValueError: If the path to the output file is not valid or the extension is not supported.
             requests.exceptions.HTTPError: If the API request fails.
         """
+        # Check if the target width and height are within the valid range of 1 and 4096
+        if not 1 <= target_width <= 4096 or not 1 <= target_height <= 4096:
+            raise ValueOutOfRangeError("The target width and height must be between 1 and 4096 pixels.")
+
         # Initialize the input handler
         input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
@@ -385,6 +389,10 @@ class ClipdropClient:
             ValueError: If the path to the output file is not valid or the extension is not PNG.
             requests.exceptions.HTTPError: If the API request fails.
         """
+        # Check if the mode is supported
+        if mode not in ['fast', 'quality']:
+            raise ValueNotSupportedError("The mode must be either 'fast' or 'quality'.")
+
         # Initialize two input handlers for the input and mask files
         input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
         mask_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
