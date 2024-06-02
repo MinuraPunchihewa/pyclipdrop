@@ -4,10 +4,9 @@ from typing import Text, Dict
 
 from pyclipdrop.settings import settings
 from pyclipdrop.io_handlers import InputFileHandler, OutputFileHandler
-from pyclipdrop.exceptions import APIRequestError, ValueTooLongError
+from pyclipdrop.exceptions import APIRequestError, ValueTooLongError, ValueNotSupportedError
 
 
-# TODO: Add more validations: not for images, but for other inputs like prompt, mode, etc.
 class ClipdropClient:
     """
     The client class for the Clipdrop API.
@@ -60,13 +59,13 @@ class ClipdropClient:
 
         output_file_handler.write(response.content)
 
-    def replace_background(self, input_file: Text, prompt: Text, output_file: Text = None):
+    def replace_background(self, input_file: Text, prompt: Text = "", output_file: Text = None):
         """
         Replace the background of an image with a new background.
 
         Args:
             input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
-            prompt (Text): The text prompt to generate the new background from.
+            prompt (Text): The text prompt to generate the new background from. The default value is an empty string.
             output_file (Text): The name of the output file. The default value is 'output' with the same extension as the input file. The extension of the output file must match the extension of the input file.
 
         Raises:
@@ -106,12 +105,13 @@ class ClipdropClient:
 
         output_file_handler.write(response.content)
         
-    def remove_background(self, input_file: Text, output_file: Text = 'output.png'):
+    def remove_background(self, input_file: Text, transparency_handling: Text = None, output_file: Text = 'output.png'):
         """
         Remove the background of an image.
 
         Args:
             input_file (Text): The name of the input file. The supported extensions are PNG, JPG (JPEG), and WEBP.
+            transparency_handling (Text): The transparency handling mode for the output image. The default value is None. The supported values are 'return_input_if_non_opaque' and 'discard_alpha_layer',
             output_file (Text): The name of the output file. The default value is 'output.png'. The supported extensions are PNG, JPG (JPEG), and WEBP.
 
         Raises:
@@ -119,6 +119,10 @@ class ClipdropClient:
             ValueError: If the path to the output file is not valid or the extension is not supported.
             requests.exceptions.HTTPError: If the API request fails.
         """
+        # Check if transparency handling is supported
+        if transparency_handling not in [None, 'return_input_if_non_opaque', 'discard_alpha_layer']:
+            raise ValueNotSupportedError("The transparency handling mode must be either 'return_input_if_non_opaque' or 'discard_alpha_layer'.")
+
         # Initialize the input and output handlers
         input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
         output_file_handler = OutputFileHandler(output_file, supported_extensions=['.png', '.jpg', '.webp'])
@@ -137,7 +141,10 @@ class ClipdropClient:
             f'{self.base_url}/remove-background/{self.version}',
             files={
                 'image_file': (input_file, image_data, f'image/{input_extension[1:]}')
-            }
+            },
+            data={
+                'transparency_handling': transparency_handling
+            } if transparency_handling else {}
         )
 
         output_file_handler.write(response.content)
