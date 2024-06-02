@@ -192,7 +192,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'], max_width=1024, max_height=1024)
         output_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input file is valid
@@ -366,7 +366,7 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize two input handlers for the input and mask files
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
+        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'], max_resolution=16, max_size=30)
         mask_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
         # Initialize the output handler
         output_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
