@@ -14,11 +14,11 @@ class InputHandler:
         self.is_file = None
 
     def validate(self) -> None:
-        if self._is_valid_file_path(self.input_file):
+        if self._is_valid_file_path():
             self.set_is_file(True)
             self.set_extension(get_extension_from_file_path(self.input_file))
 
-        elif self._is_valid_url(self.input_file):
+        elif self._is_valid_url():
             self.set_is_file(False)
             self.set_extension(get_extension_from_url(self.input_file))
 
@@ -26,14 +26,14 @@ class InputHandler:
             raise FileOrURLError("Input file must be a valid file path or URL.")
 
         if is_extension_supported(self.get_extension(), self.supported_extensions):
-            raise FileExtensionError
+            raise FileExtensionError("The input file should be one of the supported extensions: " + str(self.supported_extensions))
         
-    def _is_valid_file_path(self, file_path: Text) -> bool:
-        return Path(file_path).exists()
+    def _is_valid_file_path(self) -> bool:
+        return Path(self.input_file).exists()
     
-    def _is_valid_url(self, url: Text) -> bool:
+    def _is_valid_url(self) -> bool:
         try:
-            result = urlparse(url)
+            result = urlparse(self.input_file)
             return all([result.scheme, result.netloc])
         except AttributeError:
             return False
