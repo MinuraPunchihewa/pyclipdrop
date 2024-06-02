@@ -1,2 +1,2 @@
-from pyclipdrop.utilities.url_utilities import URLUtilities
-from pyclipdrop.utilities.file_utilites import FileUtilities
+from pyclipdrop.utilities.validators import is_extension_supported
+from pyclipdrop.utilities.extractors import get_extension_from_file_path, get_extension_from_url
