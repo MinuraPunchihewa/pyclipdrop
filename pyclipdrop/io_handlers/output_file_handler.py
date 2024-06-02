@@ -4,7 +4,7 @@ from pyclipdrop.utilities import get_extension_from_file_path, is_extension_supp
 from pyclipdrop.exceptions import FilePathError, FileExtensionError, FileOpenError, FileWriteError
 
 
-class OutputHandler:
+class OutputFileHandler:
     def __init__(self, output_file: Text, supported_extensions: List[Text] = None) -> None:
         self.output_file = output_file
         self.supported_extensions = supported_extensions

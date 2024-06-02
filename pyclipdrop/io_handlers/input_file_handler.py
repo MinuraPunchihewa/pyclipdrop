@@ -6,7 +6,7 @@ from pyclipdrop.exceptions import FileOrURLError, FileOpenError, FileExtensionEr
 from pyclipdrop.utilities import get_extension_from_file_path, get_extension_from_url, is_extension_supported
 
 
-class InputHandler:
+class InputFileHandler:
     def __init__(self, input_file: Text, supported_extensions: List[Text] = None) -> None:
         self.input_file = input_file
         self.supported_extensions =  supported_extensions
