@@ -3,11 +3,11 @@ import requests
 from typing import Text, Dict
 
 from pyclipdrop.settings import settings
+from pyclipdrop.exceptions import APIRequestError
 from pyclipdrop.io_handlers import InputHandler, OutputHandler
 
 
 # TODO: Add more validations: image size, maximum height and width, square images, etc.
-# TODO: When API request fails, raise errors with the response content
 class ClipdropClient:
     """
     The client class for the Clipdrop API.
@@ -545,7 +545,14 @@ class ClipdropClient:
             }
         )
 
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except requests.exceptions.HTTPError as e:
+            try:
+                error_message = response.json().get('error', 'No error message provided')
+            except ValueError:
+                error_message = 'The response content could not be decoded as JSON'
+            raise APIRequestError(f"The request to the Clipdrop API failed: {error_message}") from e
 
         return response
     
