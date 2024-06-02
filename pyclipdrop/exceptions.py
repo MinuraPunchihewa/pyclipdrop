@@ -20,21 +20,35 @@ class FileWriteError(Exception):
     pass
 
 
-class InputValidationError(Exception):
+class URLParseError(Exception):
     """
-    Exception raised for errors in validating the inputs passed to the various methods.
+    Exception raised for errors in parsing a URL.
     """
     pass
 
 
-class ValueOutOfRangeError(InputValidationError):
+class URLInvalidError(Exception):
+    """
+    Exception raised for when a URL is invalid.
+    """
+    pass
+
+
+class URLDownloadError(Exception):
+    """
+    Exception raised for errors in downloading content from a URL.
+    """
+    pass
+
+
+class ValueOutOfRangeError(Exception):
     """
     Exception raised when an input is out of an expected range.
     """
     pass
 
 
-class ValueTooLongError(InputValidationError):
+class ValueTooLongError(Exception):
     """
     Exception raised when an input is too long.
     """
