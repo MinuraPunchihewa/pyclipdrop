@@ -1,14 +1,16 @@
 from typing import Text, List
-from pyclipdrop.exceptions import FileExtensionUnsupportedError, FileOrURLInvalidError
+from pyclipdrop.exceptions import FileOrURLInvalidError
 from pyclipdrop.utilities import URLValidator, FileValidator, ImageContentValidator, URLReader, FileReader
 
 
 class InputFileHandler:
-    def __init__(self, input_file: Text, supported_extensions: List[Text] = None, max_resolution: int = None, max_size: int = None) -> None:
+    def __init__(self, input_file: Text, supported_extensions: List[Text] = None, max_resolution: int = None, max_size: int = None, max_width: int = None, max_height: int = None) -> None:
         self.input_file = input_file
         self.supported_extensions = supported_extensions
         self.max_resolution = max_resolution
         self.max_size = max_size
+        self.max_width = max_width
+        self.max_height = max_height
         self.input_extension = None
         self.is_file = None
         self.image_data = None
@@ -28,14 +30,20 @@ class InputFileHandler:
         if self.supported_extensions:
             FileValidator.is_valid_file_extension(self.input_extension, self.supported_extensions)
 
-        if self.max_resolution or self.max_size:
+        if self.max_resolution or self.max_size or self.max_width or self.max_height:
             image_data = self.get_data()
 
             if self.max_resolution:
-                ImageContentValidator.is_valid_resolution(image_data, self.max_resolution)
+                ImageContentValidator.exceeds_max_resolution(image_data, self.max_resolution)
 
             if self.max_size:
-                ImageContentValidator.is_valid_size(image_data, self.max_size)
+                ImageContentValidator.exceeds_max_resolution(image_data, self.max_size)
+
+            if self.max_width:
+                ImageContentValidator.exceeds_max_width(image_data, self.max_width)
+
+            if self.max_height:
+                ImageContentValidator.exceeds_max_height(image_data, self.max_height)
         
     def get_data(self) -> bytes:
         if self.image_data is None:       
