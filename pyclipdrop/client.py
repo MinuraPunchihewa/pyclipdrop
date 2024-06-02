@@ -3,7 +3,7 @@ import requests
 from typing import Text, Dict
 
 from pyclipdrop.settings import settings
-from pyclipdrop.io_handlers import InputFileHandler, OutputFileHandler
+from pyclipdrop.io_file_handlers import InputFileHandler, OutputFileHandler
 from pyclipdrop.exceptions import APIRequestError, ValueTooLongError, ValueNotSupportedError, ValueOutOfRangeError
 
 
