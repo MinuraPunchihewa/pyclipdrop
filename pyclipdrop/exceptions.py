@@ -13,6 +13,13 @@ class FileOrURLError(Exception):
     pass
 
 
+class FilePathError(Exception):
+    """
+    Exception raised for when a file path does not exist.
+    """
+    pass
+
+
 class FileOpenError(Exception):
     """
     Exception raised for errors in opening a file.
