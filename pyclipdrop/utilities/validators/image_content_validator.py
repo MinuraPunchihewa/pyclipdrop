@@ -1,5 +1,6 @@
 from PIL import Image
 from io import BytesIO
+from pyclipdrop.exceptions import FileResolutionError, FileSizeError
 
 
 class ImageContentValidator:
@@ -13,7 +14,8 @@ class ImageContentValidator:
             total_megapixels = total_pixels / 1_000_000
 
             # Check if the total megapixels exceeds the maximum
-            return total_megapixels > max_megapixels
+            if total_megapixels > max_megapixels:
+                raise FileResolutionError(f"Input image must have a resolution of {max_megapixels} megapixels or less.")
         
 
     @staticmethod
@@ -22,4 +24,5 @@ class ImageContentValidator:
         total_megabytes = len(image_bytes) / 1_000_000
 
         # Check if the total megabytes exceeds the maximum
-        return total_megabytes > max_megabytes
+        if total_megabytes > max_megabytes:
+            raise FileSizeError(f"Input image must have a size of {max_megabytes} megabytes or less.")
