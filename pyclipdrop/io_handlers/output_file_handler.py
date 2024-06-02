@@ -1,5 +1,5 @@
 from typing import Text, List
-from pyclipdrop.utilities import FilePathValidator, FileReader, FileWriter
+from pyclipdrop.utilities import FileValidator, FileReader, FileWriter
 
 
 class OutputFileHandler:
@@ -9,7 +9,7 @@ class OutputFileHandler:
         self.output_extension = None
 
     def validate(self) -> None:
-        if FilePathValidator.is_valid_parent_directory(self.output_file):
+        if FileValidator.is_valid_parent_directory(self.output_file):
             self.output_extension = FileReader.get_extension_from_file_path(self.output_file)
 
         else:

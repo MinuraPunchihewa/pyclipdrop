@@ -20,6 +20,20 @@ class FileWriteError(Exception):
     pass
 
 
+class FileExtensionUnsupportedError(Exception):
+    """
+    Exception raised for when a file extension is unsupported.
+    """
+    pass
+
+
+class FileOrURLInvalidError(Exception):
+    """
+    Exception raised for when a file or URL is invalid.
+    """
+    pass
+
+
 class URLParseError(Exception):
     """
     Exception raised for errors in parsing a URL.

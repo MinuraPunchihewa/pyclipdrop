@@ -1,3 +1,3 @@
 from pyclipdrop.utilities.validators.url_validator import URLValidator
-from pyclipdrop.utilities.validators.image_validator import ImageValidator
-from pyclipdrop.utilities.validators.file_path_validator import FilePathValidator
+from pyclipdrop.utilities.validators.image_content_validator import ImageContentValidator
+from pyclipdrop.utilities.validators.file_validator import FileValidator
