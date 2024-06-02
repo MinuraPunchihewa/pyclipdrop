@@ -60,3 +60,10 @@ class ValueTooLongError(Exception):
     Exception raised when an input is too long.
     """
     pass
+
+
+class ValueNotSupportedError(Exception):
+    """
+    Exception raised when an input is not supported.
+    """
+    pass
