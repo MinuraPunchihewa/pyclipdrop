@@ -235,6 +235,10 @@ class ClipdropClient:
             ValueError: If the path to the output file is not valid or the extension is not PNG.
             requests.exceptions.HTTPError: If the API request fails.
         """
+        # Check if prompt is less than 5000 characters
+        if len(prompt) > 5000:
+            raise ValueTooLongError("The prompt must be less than 5000 characters.")
+
         # Initialize the input and output handlers
         input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
         output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
@@ -259,7 +263,7 @@ class ClipdropClient:
 
         output_file_handler.write(response.content)
 
-    def uncrop(self, input_file: Text, extend_up: int = 0, extend_down: int = 0, extend_left: int = 0, extend_right: int = 0, output_file: Text = 'output.jpg'):
+    def uncrop(self, input_file: Text, extend_up: int = 0, extend_down: int = 0, extend_left: int = 0, extend_right: int = 0, seed: int = None, output_file: Text = 'output.jpg'):
         """
         Generate new extensions of an image.
 
@@ -269,6 +273,7 @@ class ClipdropClient:
             extend_down (int): The number of pixels to extend the canvas down. The default value is 0.
             extend_left (int): The number of pixels to extend the canvas left. The default value is 0.
             extend_right (int): The number of pixels to extend the canvas right. The default value is 0.
+            seed (int): The seed for making the result deterministic. The default value is None.
             output_file (Text): The name of the output file. The default value is 'output.jpg'. The only supported extension is JPG (JPEG).
 
         Raises:
@@ -276,6 +281,8 @@ class ClipdropClient:
             ValueError: If the path to the output file is not valid or the extension is not supported.
             requests.exceptions.HTTPError: If the API request fails.
         """
+        # TODO: Check if the extend values are within a valid range: negative values?
+
         # Initialize the input and output handlers
         input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
         output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
@@ -290,17 +297,23 @@ class ClipdropClient:
         # Check if the output file is valid
         output_file_handler.validate()
 
+        # Add the data to the request
+        data = {
+            'extend_up': extend_up,
+            'extend_down': extend_down,
+            'extend_left': extend_left,
+            'extend_right': extend_right
+        }
+
+        if seed:
+            data['seed'] = seed
+
         response = self._submit_request(
             f'{self.base_url}/uncrop/{self.version}',
             files={
                 'image_file': (input_file, image_data, f'image/{input_extension[1:]}')
             },
-            data={
-                'extend_up': extend_up,
-                'extend_down': extend_down,
-                'extend_left': extend_left,
-                'extend_right': extend_right
-            }
+            data=data
         )
 
         output_file_handler.write(response.content)
