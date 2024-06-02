@@ -1,5 +1,5 @@
 from typing import Text, List
-from pyclipdrop.utilities import URLUtilities, FileUtilities
+from pyclipdrop.utilities import URLValidator, FilePathValidator, URLReader, FileReader
 
 
 class InputHandler:
@@ -10,12 +10,12 @@ class InputHandler:
         self.is_file = None
 
     def validate(self) -> None:
-        if FileUtilities.is_valid_file_path(self.input_file):
-            self.input_extension = FileUtilities.get_suffix_from_file_path(self.input_file)
+        if FilePathValidator.is_valid_file_path(self.input_file):
+            self.input_extension = FileReader.get_extension_from_file_path(self.input_file)
             self.is_file = True
 
-        elif URLUtilities.is_valid_url(self.input_file):
-            self.input_extension = URLUtilities.get_suffix_from_url(self.input_file)
+        elif URLValidator.is_valid_url(self.input_file):
+            self.input_extension = URLReader.get_extension_from_url(self.input_file)
             self.is_file = False
 
         else:
@@ -26,9 +26,9 @@ class InputHandler:
         
     def get_data(self) -> bytes:
         if self.is_file:
-            return FileUtilities.get_data_from_file_path(self.input_file)
+            return FileReader.get_data_from_file_path(self.input_file)
         else:
-            return URLUtilities.get_data_from_url(self.input_file)
+            return URLReader.get_data_from_url(self.input_file)
         
     def get_extension(self) -> Text:
         return self.input_extension
