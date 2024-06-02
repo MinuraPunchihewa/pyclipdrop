@@ -573,6 +573,6 @@ class ClipdropClient:
                 try:
                     f.write(response.content)
                 except (IOError, OSError) as e:
-                    raise FileWriteError("Error writing to file: " + str(e))
-        except (FileNotFoundError, PermissionError, OSError) as e:
-            raise FileOpenError("Error opening file: " + str(e))
+                    raise FileWriteError("Error writing to file: " + str(e)) from e
+        except (PermissionError, OSError) as e:
+            raise FileOpenError("Error opening file: " + str(e)) from e
