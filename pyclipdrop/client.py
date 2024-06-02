@@ -549,9 +549,9 @@ class ClipdropClient:
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             try:
-                error_message = response.json().get('error', 'No error message provided')
+                error_message = response.json().get('error', 'No error message provided by the API')
             except ValueError:
-                error_message = 'The response content could not be decoded as JSON'
+                error_message = 'The response content from the API could not be decoded as JSON'
             raise APIRequestError(f"The request to the Clipdrop API failed: {error_message}") from e
 
         return response
