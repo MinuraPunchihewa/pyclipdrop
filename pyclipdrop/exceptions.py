@@ -34,6 +34,20 @@ class FileOrURLInvalidError(Exception):
     pass
 
 
+class FileSizeError(Exception):
+    """
+    Exception raised for when a file size is invalid.
+    """
+    pass
+
+
+class FileResolutionError(Exception):
+    """
+    Exception raised for when a file resolution is invalid.
+    """
+    pass
+
+
 class URLParseError(Exception):
     """
     Exception raised for errors in parsing a URL.
