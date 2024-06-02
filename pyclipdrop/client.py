@@ -4,7 +4,7 @@ from typing import Text, Dict
 
 from pyclipdrop.settings import settings
 from pyclipdrop.io_handlers import InputHandler, OutputHandler
-from pyclipdrop.exceptions import APIRequestError, FileOpenError, FileWriteError
+from pyclipdrop.exceptions import APIRequestError, FileOpenError, FileWriteError, ValueTooLongError
 
 
 # TODO: Add more validations: image size, maximum height and width, square images, etc.
@@ -41,6 +41,10 @@ class ClipdropClient:
             ValueError: If the path to the output file is not valid or the extension is not PNG.
             requests.exceptions.HTTPError: If the API request fails.        
         """
+        # Check if prompt is less than 1000 characters
+        if len(prompt) > 1000:
+            raise ValueTooLongError("The prompt must be less than 1000 characters.")
+
         # Initialize the output handler
         output_handler = OutputHandler(output_file, supported_extensions=['.png'])
 
