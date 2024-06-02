@@ -395,21 +395,21 @@ class ClipdropClient:
 
         # Initialize two input handlers for the input and mask files
         input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
-        mask_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
+        mask_file_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
         # Initialize the output handler
         output_file_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
 
         # Check if the input files are valid
         input_file_handler.validate()
-        mask_handler.validate()
+        mask_file_handler.validate()
 
         # Get input data and suffix
         image_data = input_file_handler.read()
         input_extension = input_file_handler.get_extension()
 
         # Get mask data and suffix
-        mask_data = mask_handler.get_data()
-        mask_suffix = mask_handler.get_extension()
+        mask_data = mask_file_handler.read()
+        mask_suffix = mask_file_handler.get_extension()
 
         # Check if the output file is valid
         output_file_handler.validate()
@@ -521,21 +521,21 @@ class ClipdropClient:
         """
         # Initialize two input handlers for the input and mask files
         input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
-        mask_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
+        mask_file_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
         # Initialize the output handler
         output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input files are valid
         input_file_handler.validate()
-        mask_handler.validate()
+        mask_file_handler.validate()
 
         # Get input data and suffix
         image_data = input_file_handler.read()
         input_extension = input_file_handler.get_extension()
 
         # Get mask data and suffix
-        mask_data = mask_handler.get_data()
-        mask_suffix = mask_handler.get_extension()
+        mask_data = mask_file_handler.read()
+        mask_suffix = mask_file_handler.get_extension()
 
         # Check if the output file is valid
         output_file_handler.validate()
