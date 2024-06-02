@@ -20,21 +20,14 @@ class FileWriteError(Exception):
     pass
 
 
-class InputValidationError(Exception):
-    """
-    Exception raised for errors in validating the inputs passed to the various methods.
-    """
-    pass
-
-
-class ValueOutOfRangeError(InputValidationError):
+class ValueOutOfRangeError(Exception):
     """
     Exception raised when an input is out of an expected range.
     """
     pass
 
 
-class ValueTooLongError(InputValidationError):
+class ValueTooLongError(Exception):
     """
     Exception raised when an input is too long.
     """
