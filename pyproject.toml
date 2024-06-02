@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pyclipdrop"
-version = "0.1.0"
+version = "1.0.0"
 description = "The Python SDK for the Clipdrop API."
 authors = ["Minura Punchihewa <minurapunchihewa17@gmail.com>"]
 readme = "README.md"
