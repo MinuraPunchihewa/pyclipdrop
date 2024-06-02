@@ -2,7 +2,7 @@ from typing import Text, List
 from pyclipdrop.utilities import FilePathValidator, FileReader, FileWriter
 
 
-class OutputHandler:
+class OutputFileHandler:
     def __init__(self, output_file: Text, supported_extensions: List[Text] = None) -> None:
         self.output_file = output_file
         self.supported_extensions = supported_extensions + ['.jpeg'] if '.jpg' in supported_extensions else supported_extensions

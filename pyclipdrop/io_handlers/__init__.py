@@ -1,2 +1,2 @@
-from pyclipdrop.io_handlers.input_handler import InputHandler
-from pyclipdrop.io_handlers.output_handler import OutputHandler
+from pyclipdrop.io_handlers.input_file_handler import InputFileHandler
+from pyclipdrop.io_handlers.output_file_handler import OutputFileHandler
