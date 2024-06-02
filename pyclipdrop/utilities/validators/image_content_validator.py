@@ -26,3 +26,15 @@ class ImageContentValidator:
         # Check if the total megabytes exceeds the maximum
         if total_megabytes > max_megabytes:
             raise FileSizeError(f"Input image must have a size of {max_megabytes} megabytes or less.")
+        
+    @staticmethod
+    def exceeds_max_width(image_bytes: bytes, max_width: int) -> bool:
+        with Image.open(BytesIO(image_bytes)) as image:
+            if image.width > max_width:
+                raise FileResolutionError(f"Input image must have a width of {max_width} pixels or less.")
+            
+    @staticmethod
+    def exceeds_max_height(image_bytes: bytes, max_height: int) -> bool:
+        with Image.open(BytesIO(image_bytes)) as image:
+            if image.height > max_height:
+                raise FileResolutionError(f"Input image must have a height of {max_height} pixels or less.")
