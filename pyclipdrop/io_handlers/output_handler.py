@@ -1,5 +1,5 @@
 from typing import Text, List
-from pyclipdrop.utilities import FilePathValidator, FileWriter
+from pyclipdrop.utilities import FilePathValidator, FileReader, FileWriter
 
 
 class OutputHandler:

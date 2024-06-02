@@ -58,7 +58,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def replace_background(self, input_file: Text, prompt: Text, output_file: Text = None):
         """
@@ -104,7 +104,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
         
     def remove_background(self, input_file: Text, output_file: Text = 'output.png'):
         """
@@ -140,7 +140,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def remove_text(self, input_file: Text, output_file: Text = 'output.png'):
         """
@@ -176,7 +176,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def reimagine(self, input_file: Text, output_file: Text = 'output.jpg'):
         """
@@ -212,7 +212,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def sketch_to_image(self, input_file: Text, prompt: Text, output_file: Text = 'output.png'):
         """
@@ -250,7 +250,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def uncrop(self, input_file: Text, extend_up: int = 0, extend_down: int = 0, extend_left: int = 0, extend_right: int = 0, output_file: Text = 'output.jpg'):
         """
@@ -296,7 +296,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def image_upscaling(self, input_file: Text, target_width: int, target_height: int, output_file: Text = None):
         """
@@ -347,7 +347,7 @@ class ClipdropClient:
         # Check if the output file is valid
         output_handler.validate()
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def cleanup(self, input_file: Text, mask_file: Text, mode: Text = 'fast', output_file: Text = 'output.png'):
         """
@@ -401,7 +401,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def portrait_depth_estimation(self, input_file: Text, output_file: Text = 'output.jpg'):
         """
@@ -437,7 +437,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def portrait_surface_normals(self, input_file: Text, output_file: Text = 'output.jpg'):
         """
@@ -473,7 +473,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def text_inpainting(self, input_file: Text, mask_file: Text, prompt: Text, output_file: Text = 'output.jpg'):
         """
@@ -523,7 +523,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_handler.write_data(response.content)
 
     def _submit_request(self, url: Text, files: Dict, data: Dict = None) -> requests.Response:
         """
@@ -559,20 +559,3 @@ class ClipdropClient:
             raise APIRequestError(f"The request to the Clipdrop API failed: {error_message}") from e
 
         return response
-    
-    def _save_response(self, response: requests.Response, output_file: Text) -> None:
-        """
-        Save the content of a response object to a file.
-
-        Args:
-            response (requests.Response): The response object to save.
-            output_file (Text): The name of the output file.
-        """
-        try:
-            with open(output_file, 'wb') as f:
-                try:
-                    f.write(response.content)
-                except (IOError, OSError) as e:
-                    raise FileWriteError("Error writing to file: " + str(e)) from e
-        except (PermissionError, OSError) as e:
-            raise FileOpenError("Error opening file: " + str(e)) from e
