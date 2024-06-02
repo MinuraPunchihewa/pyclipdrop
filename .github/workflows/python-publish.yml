@@ -12,7 +12,7 @@ jobs:
         uses: code-specialist/pypi-poetry-publish@v1.2
         with:
           BRANCH: "main"
-          PACKAGE_DIRECTORY: "./pyclidrop/"
+          PACKAGE_DIRECTORY: "./pyclipdrop/"
           PYTHON_VERSION: "3.10"
           ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PUBLISH_REGISTRY_PASSWORD: ${{ secrets.PYPI_TOKEN }}
