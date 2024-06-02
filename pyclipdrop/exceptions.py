@@ -6,6 +6,13 @@ class APIRequestError(Exception):
     pass
 
 
+class FileOrURLError(Exception):
+    """
+    Exception raised for invalid file paths or URLs.
+    """
+    pass
+
+
 class FileOpenError(Exception):
     """
     Exception raised for errors in opening a file.
@@ -16,6 +23,20 @@ class FileOpenError(Exception):
 class FileWriteError(Exception):
     """
     Exception raised for errors in writing to a file.
+    """
+    pass
+
+
+class FileExtensionError(Exception):
+    """
+    Exception raised when a file extension is not supported.
+    """
+    pass
+
+
+class URLReadError(Exception):
+    """
+    Exception raised for errors in reading from a URL.
     """
     pass
 
