@@ -2,7 +2,7 @@ from PIL import Image
 from io import BytesIO
 
 
-class ImageValidator:
+class ImageContentValidator:
     @staticmethod
     def exceeds_max_resolution(image_bytes: bytes, max_megapixels: int) -> bool:
         with Image.open(BytesIO(image_bytes)) as image:
@@ -14,3 +14,12 @@ class ImageValidator:
 
             # Check if the total megapixels exceeds the maximum
             return total_megapixels > max_megapixels
+        
+
+    @staticmethod
+    def exceeds_max_file_size(image_bytes: bytes, max_megabytes: int) -> bool:
+        # Convert bytes to megabytes
+        total_megabytes = len(image_bytes) / 1_000_000
+
+        # Check if the total megabytes exceeds the maximum
+        return total_megabytes > max_megabytes
