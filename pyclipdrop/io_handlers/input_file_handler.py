@@ -1,11 +1,13 @@
 from typing import Text, List
-from pyclipdrop.utilities import URLValidator, FilePathValidator, URLReader, FileReader
+from pyclipdrop.utilities import URLValidator, FilePathValidator, ImageValidator, URLReader, FileReader
 
 
 class InputFileHandler:
-    def __init__(self, input_file: Text, supported_extensions: List[Text] = None) -> None:
+    def __init__(self, input_file: Text, supported_extensions: List[Text] = None, max_resolution: int = None, max_size: int = None) -> None:
         self.input_file = input_file
         self.supported_extensions =  supported_extensions + ['.jpeg'] if '.jpg' in supported_extensions else supported_extensions
+        self.max_resolution = max_resolution
+        self.max_size = max_size
         self.input_extension = None
         self.is_file = None
 
