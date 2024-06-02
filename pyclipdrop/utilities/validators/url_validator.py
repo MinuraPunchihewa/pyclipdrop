@@ -8,5 +8,5 @@ class URLValidator:
         try:
             result = urlparse(url)
             return all([result.scheme, result.netloc])
-        except AttributeError as e:
+        except AttributeError:
             return False
