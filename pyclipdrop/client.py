@@ -3,8 +3,8 @@ import requests
 from typing import Text, Dict
 
 from pyclipdrop.settings import settings
-from pyclipdrop.exceptions import APIRequestError
 from pyclipdrop.io_handlers import InputHandler, OutputHandler
+from pyclipdrop.exceptions import APIRequestError, FileOpenError, FileWriteError
 
 
 # TODO: Add more validations: image size, maximum height and width, square images, etc.
@@ -564,5 +564,11 @@ class ClipdropClient:
             response (requests.Response): The response object to save.
             output_file (Text): The name of the output file.
         """
-        with open(output_file, 'wb') as f:
-            f.write(response.content)
+        try:
+            with open(output_file, 'wb') as f:
+                try:
+                    f.write(response.content)
+                except (IOError, OSError) as e:
+                    raise FileWriteError("Error writing to file: " + str(e))
+        except (FileNotFoundError, PermissionError, OSError) as e:
+            raise FileOpenError("Error opening file: " + str(e))
