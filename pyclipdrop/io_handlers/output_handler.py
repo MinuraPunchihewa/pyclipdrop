@@ -1,5 +1,5 @@
 from typing import Text, List
-from pyclipdrop.utilities import FilePathValidator, FileReader
+from pyclipdrop.utilities import FilePathValidator, FileWriter
 
 
 class OutputHandler:
@@ -17,3 +17,6 @@ class OutputHandler:
         
         if self.supported_extensions and self.output_extension not in self.supported_extensions:
             raise ValueError(f"Output file must have one of the following extensions: {', '.join(self.supported_extensions)}")
+        
+    def write_data(self, data: bytes) -> None:
+        FileWriter.write_data_to_file_path(self.output_file, data)
