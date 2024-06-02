@@ -1,34 +1,71 @@
+import urllib.request
+from pathlib import Path
 from typing import Text, List
-from pyclipdrop.utilities import URLUtilities, FileUtilities
+from urllib.parse import urlparse
+from pyclipdrop.exceptions import FileOrURLError, FileOpenError, FileExtensionError, URLReadError
+from pyclipdrop.utilities import get_extension_from_file_path, get_extension_from_url, is_extension_supported
 
 
 class InputHandler:
     def __init__(self, input_file: Text, supported_extensions: List[Text] = None) -> None:
         self.input_file = input_file
-        self.supported_extensions =  supported_extensions + ['.jpeg'] if '.jpg' in supported_extensions else supported_extensions
+        self.supported_extensions =  supported_extensions
         self.input_extension = None
         self.is_file = None
 
     def validate(self) -> None:
-        if FileUtilities.is_valid_file_path(self.input_file):
-            self.input_extension = FileUtilities.get_suffix_from_file_path(self.input_file)
-            self.is_file = True
+        if self._is_valid_file_path(self.input_file):
+            self.set_is_file(True)
+            self.set_extension(get_extension_from_file_path(self.input_file))
 
-        elif URLUtilities.is_valid_url(self.input_file):
-            self.input_extension = URLUtilities.get_suffix_from_url(self.input_file)
-            self.is_file = False
+        elif self._is_valid_url(self.input_file):
+            self.set_is_file(False)
+            self.set_extension(get_extension_from_url(self.input_file))
 
         else:
-            raise ValueError("Input file must be a valid file path or URL.")
+            raise FileOrURLError("Input file must be a valid file path or URL.")
 
-        if self.supported_extensions and self.input_extension not in self.supported_extensions:
-            raise ValueError(f"Input file must have one of the following extensions: {', '.join(self.supported_extensions)}")
+        if is_extension_supported(self.get_extension(), self.supported_extensions):
+            raise FileExtensionError
         
-    def get_data(self) -> bytes:
-        if self.is_file:
-            return FileUtilities.get_data_from_file_path(self.input_file)
-        else:
-            return URLUtilities.get_data_from_url(self.input_file)
+    def _is_valid_file_path(self, file_path: Text) -> bool:
+        return Path(file_path).exists()
+    
+    def _is_valid_url(self, url: Text) -> bool:
+        try:
+            result = urlparse(url)
+            return all([result.scheme, result.netloc])
+        except AttributeError:
+            return False
         
     def get_extension(self) -> Text:
         return self.input_extension
+    
+    def set_extension(self, extension: Text) -> None:
+        self.input_extension = extension
+
+    def get_is_file(self) -> bool:
+        return self.is_file
+    
+    def set_is_file(self, is_file: bool) -> None:
+        self.is_file = is_file
+    
+    def read(self) -> bytes:
+        if self.get_is_file():
+            return self._read_file(self.input_file)
+        else:
+            return self._read_url(self.input_file)
+    
+    def _read_file(self, file_path) -> bytes:
+        try:
+            with open(file_path, 'rb') as file:
+                return file.read()
+        except (PermissionError, OSError) as e:
+            raise FileOpenError("Error opening file: " + str(e)) from e
+        
+    def _read_url(self, url) -> bytes:
+        try:
+            with urllib.request.urlopen(url) as response:
+                return response.read()
+        except (urllib.error.HTTPError, urllib.error.URLError) as e:
+            raise URLReadError("Error in API request: " + str(e)) from e
