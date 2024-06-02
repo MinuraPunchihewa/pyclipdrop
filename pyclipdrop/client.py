@@ -4,7 +4,7 @@ from typing import Text, Dict
 
 from pyclipdrop.settings import settings
 from pyclipdrop.io_handlers import InputFileHandler, OutputFileHandler
-from pyclipdrop.exceptions import APIRequestError, FileOpenError, FileWriteError, ValueTooLongError
+from pyclipdrop.exceptions import APIRequestError, ValueTooLongError
 
 
 # TODO: Add more validations: not for images, but for other inputs like prompt, mode, etc.
@@ -46,10 +46,10 @@ class ClipdropClient:
             raise ValueTooLongError("The prompt must be less than 1000 characters.")
 
         # Initialize the output handler
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/text-to-image/{self.version}',
@@ -58,7 +58,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def replace_background(self, input_file: Text, prompt: Text, output_file: Text = None):
         """
@@ -75,24 +75,24 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.       
         """
         # Initialize the input handler
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # If the output file is not specified, use 'output' with the same extension as the input file
         if not output_file:
             output_file = f'output{input_extension}'
 
         # Initialize the output handler
-        output_handler = OutputFileHandler(output_file, supported_extensions=[input_extension])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=[input_extension])
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/replace-background/{self.version}',
@@ -104,7 +104,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
         
     def remove_background(self, input_file: Text, output_file: Text = 'output.png'):
         """
@@ -120,18 +120,18 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.png', '.jpg', '.webp'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/remove-background/{self.version}',
@@ -140,7 +140,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def remove_text(self, input_file: Text, output_file: Text = 'output.png'):
         """
@@ -156,18 +156,18 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/remove-text/{self.version}',
@@ -176,7 +176,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def reimagine(self, input_file: Text, output_file: Text = 'output.jpg'):
         """
@@ -192,18 +192,18 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()        
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()        
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/reimagine/{self.version}/reimagine',
@@ -212,7 +212,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def sketch_to_image(self, input_file: Text, prompt: Text, output_file: Text = 'output.png'):
         """
@@ -229,18 +229,18 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/sketch-to-image/{self.version}/sketch-to-image',
@@ -250,7 +250,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def uncrop(self, input_file: Text, extend_up: int = 0, extend_down: int = 0, extend_left: int = 0, extend_right: int = 0, output_file: Text = 'output.jpg'):
         """
@@ -270,18 +270,18 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/uncrop/{self.version}',
@@ -296,7 +296,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def image_upscaling(self, input_file: Text, target_width: int, target_height: int, output_file: Text = None):
         """
@@ -314,14 +314,14 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input handler
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         response = self._submit_request(
             f'{self.base_url}/image-upscaling/{self.version}/upscale',
@@ -342,12 +342,12 @@ class ClipdropClient:
             output_file = f'output{expected_output_extension}'
 
         # Initialize the output handler
-        output_handler = OutputFileHandler(output_file, supported_extensions=[expected_output_extension])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=[expected_output_extension])
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def cleanup(self, input_file: Text, mask_file: Text, mode: Text = 'fast', output_file: Text = 'output.png'):
         """
@@ -366,25 +366,25 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize two input handlers for the input and mask files
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
         mask_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
         # Initialize the output handler
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.png'])
 
         # Check if the input files are valid
-        input_handler.validate()
+        input_file_handler.validate()
         mask_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Get mask data and suffix
         mask_data = mask_handler.get_data()
         mask_suffix = mask_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         # Check if the mode is valid
         if mode not in ['fast', 'quality']:
@@ -401,7 +401,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def portrait_depth_estimation(self, input_file: Text, output_file: Text = 'output.jpg'):
         """
@@ -417,18 +417,18 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/portrait-depth-estimation/{self.version}',
@@ -437,7 +437,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def portrait_surface_normals(self, input_file: Text, output_file: Text = 'output.jpg'):
         """
@@ -453,18 +453,18 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize the input and output handlers
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg', '.webp'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input file is valid
-        input_handler.validate()
+        input_file_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/portrait-surface-normals/{self.version}',
@@ -473,7 +473,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def text_inpainting(self, input_file: Text, mask_file: Text, prompt: Text, output_file: Text = 'output.jpg'):
         """
@@ -492,25 +492,25 @@ class ClipdropClient:
             requests.exceptions.HTTPError: If the API request fails.
         """
         # Initialize two input handlers for the input and mask files
-        input_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
+        input_file_handler = InputFileHandler(input_file, supported_extensions=['.png', '.jpg'])
         mask_handler = InputFileHandler(mask_file, supported_extensions=['.png'])
         # Initialize the output handler
-        output_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
+        output_file_handler = OutputFileHandler(output_file, supported_extensions=['.jpg'])
 
         # Check if the input files are valid
-        input_handler.validate()
+        input_file_handler.validate()
         mask_handler.validate()
 
         # Get input data and suffix
-        image_data = input_handler.get_data()
-        input_extension = input_handler.get_extension()
+        image_data = input_file_handler.read()
+        input_extension = input_file_handler.get_extension()
 
         # Get mask data and suffix
         mask_data = mask_handler.get_data()
         mask_suffix = mask_handler.get_extension()
 
         # Check if the output file is valid
-        output_handler.validate()
+        output_file_handler.validate()
 
         response = self._submit_request(
             f'{self.base_url}/text-inpainting/{self.version}',
@@ -523,7 +523,7 @@ class ClipdropClient:
             }
         )
 
-        self._save_response(response, output_file)
+        output_file_handler.write(response.content)
 
     def _submit_request(self, url: Text, files: Dict, data: Dict = None) -> requests.Response:
         """
@@ -559,20 +559,3 @@ class ClipdropClient:
             raise APIRequestError(f"The request to the Clipdrop API failed: {error_message}") from e
 
         return response
-    
-    def _save_response(self, response: requests.Response, output_file: Text) -> None:
-        """
-        Save the content of a response object to a file.
-
-        Args:
-            response (requests.Response): The response object to save.
-            output_file (Text): The name of the output file.
-        """
-        try:
-            with open(output_file, 'wb') as f:
-                try:
-                    f.write(response.content)
-                except (IOError, OSError) as e:
-                    raise FileWriteError("Error writing to file: " + str(e))
-        except (FileNotFoundError, PermissionError, OSError) as e:
-            raise FileOpenError("Error opening file: " + str(e))
