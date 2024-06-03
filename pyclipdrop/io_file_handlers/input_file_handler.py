@@ -26,7 +26,7 @@ class InputFileHandler:
             raise FileOrURLError("Input file must be a valid file path or URL.")
 
         if not is_extension_supported(self.get_extension(), self.supported_extensions):
-            raise FileExtensionError(f"The input file should be one of the supported extensions: {" ".join(self.supported_extensions)}")
+            raise FileExtensionError(f"The input file should be one of the supported extensions: {', '.join(self.supported_extensions)}")
         
     def _is_valid_file_path(self) -> bool:
         return Path(self.input_file).exists()
